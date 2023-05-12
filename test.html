@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>MAIN TASK PAGE</title>
+    <script src="https://unpkg.com/jspsych@7.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.0.0"></script>
+    <link href="https://unpkg.com/jspsych@7.0.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="utils.js"></script>
+  </head>
+  <body>
+    <style type="text/css">
+        @import url(//fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+    </style>
+  </body>
+  <script>
+
+  alert('전체화면을 위해서는 실험으로 넘어가기 전, f11을 누르세요. 정확한 실험 데이터를 위해서는 큰 화면으로 실험을 진행해주세요.');
+    
+    var jsPsych = initJsPsych({
+      show_progress_bar: true,
+      auto_update_progress_bar: false,
+      on_finish: function() {
+        var data=jsPsych.data.get();
+        var filename="VAtask_main.csv";
+        getCSV(data, filename);
+        alert('감사합니다. 메인 화면으로 넘어갑니다.');
+        location.replace('index.php');
+      }
+    });
+
+    var timeline = [];
+    var stimulus_cnt = 180;
+
+    var preload = {
+      type: jsPsychPreload,
+      auto_preload:true
+    };
+    timeline.push(preload);
+
+    //instructions start 
+    var welcome = { 
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `<p>본 과제는 좌우반구의 언어정보처리 평가 과제입니다.</p>
+        <p>이 시행의 결과는 csv파일로 다운로드 됩니다.</p>`
+    };
+    timeline.push(welcome);
+
+    var instructions_one = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `<p>실험이 시작되면 화면 정중앙에 있는 '+' 응시점의 좌측과 우측에서 자극이 짧은 시간 동안 나타났다가 사라집니다.</p> 
+      <p>참가자분들은 응시점에만 시선을 고정시켜야하며, 자극이 나타나는 쪽으로 시선을 움직이면 안됩니다.</p>
+      `,
+      trial_duration: 10000,
+    };
+    timeline.push(instructions_one);
+
+    var instructions_two = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `<p>참가자들은 나타나는 자극이 한국어 '어절'인지 아닌지 키보드 버튼으로 판단해주면 됩니다.</p><p> 어절인 경우에는 '/'키를 어절이 아닌 경우에는 'z'키를 누르면 됩니다.</p> 
+      <p>'어절'이란 문장 내에서 띄어쓰기 단위로 나뉘어진 단위입니다.</p><p> 예를 들어, '철수가 영희에게 물었다.'에서 '철수가', '영희에게', '물었다'는 모두 어절이 될 수 있습니다.</p><p> 반면에, 어절이 아닌 경우는 평상시 사용할 수 없는 '싧했다', '픁던데요' 등이 있습니다.</p>
+      `,
+      trial_duration: 10000,
+    };
+    timeline.push(instructions_two);
+
+    var instructions_three = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `<p>모든 참가자분들은 본 과제 수행 시 모니터 화면과 자신의 눈동자 간의 간격이 약 60cm가 되도록 의식하고,</p><p> 움직임 없는 정자세로 실험을 마무리해주시기 바랍니다.</p>
+      <p>준비가 되셨다면, 아무 키나 눌러주세요.</p>
+      `,
+      trial_duration: 10000,
+    };
+    timeline.push(instructions_three);
+
+    //instructions over 
+
+    var fixation = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<div style="font-size:60px;">+</div>',
+      choices: "NO_KEYS",
+      trial_duration: 2000,
+      data: {
+        task: 'fixation'
+      }
+    };
+
+    var blank = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: ' ',
+      choices: "NO_KEYS",
+      trial_duration: 1000,
+      data: {
+        task: 'blank'
+      }
+    };
+
+    var test_stimuli = [
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "별미로",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "결속력은",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "길거리에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "탄생일이",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "숙소가",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "단어를",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "의무실에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "핑계로",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "부스는",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "값에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "길이",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "현상을",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "정책에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "동네에서",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "궤도에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "귲가",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "땀화전로",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "신노을",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "어험백이",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "공에가",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "낌표에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "님거로",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "짓기을",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "반충으에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "대희개에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "위모을",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "땀득를",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "뉵에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "들면름는",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "절과에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "시행에서",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "유형에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "지표가",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "차익이",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "된서리를",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "사상과",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "분포는",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "충성심을",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "젓가락을",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "재계에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "원리에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "대상에서",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "무형의",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "손짓으로",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "원형의",
+    "main_coranswer": "/",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "요소가",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "정오를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "보고를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "비상이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "심복이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "화력을",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "사안이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "제도를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "설명도",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "모험으로",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "담화는",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "유언으로",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "후자의",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "관계도",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "중공업에",
+    "main_coranswer": "/",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "탑을",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "항목으로",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "체제라고",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "편법으로",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "압축은",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "타당성을",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "오류를",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "분류를",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "한계는",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "우려는",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "타격을",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "놈들한테",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "광장도",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "행보에",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "전역에서",
+    "main_coranswer": "/",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "노조가",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "사적으로",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "지적은",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "증인이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "경비를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "상관을",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "횟수는",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "참가자는",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "방식으로",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "저장소를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "개인이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "비교를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "준거를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "확률이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "제안을",
+    "main_coranswer": "/",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "관련성에",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "필수로",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "도박에",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "분석에",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "형태에",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "이득을",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "후대를",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "별개의",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "논란이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "기름이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "희망을",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "대원들이",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "소송을",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "삽시간에",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "무가",
+    "main_coranswer": "/",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "싱간에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "의질를",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "힘을인서",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "화어이",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "충꿈는",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "소료에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "설자이",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "포량인서",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "준사기에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "와확자서",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "름방의",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "도모집로",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "법재를",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "간에이",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "통지력로",
+    "main_coranswer": "z",
+    "main_VA": "RVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "의으직를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "시길이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "탄눈는",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "망전백고",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "계한에로",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "능모은",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "가건준테",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "들으과",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "리영편을",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "요길에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "응속을",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "선관리을",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "싱사를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "선낌은",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "집참안로",
+    "main_coranswer": "z",
+    "main_VA": "LVF_1",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "을정후로",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "판심의",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "에대는",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "듈을",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "결용이",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "택선의",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "일공관을",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "스료가",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "지과가",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "수으를",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "오님도",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "험으에",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "전느가",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "신놈를",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "본호도",
+    "main_coranswer": "z",
+    "main_VA": "RVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "리거필로",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "적변는",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "제별를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "서참도",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "말보을",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "사비현이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "모결하에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "으무에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "록타품를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "에준이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "령형를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "자철를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "뇰이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "요차이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "으전을",
+    "main_coranswer": "z",
+    "main_VA": "LVF_2",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "조에식에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "질상으은",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "적친비을",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "름비로",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "란에이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "국원자를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "축정계이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "스성원가",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "표나청에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "률타를",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "외림력서",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "송눈에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "운들에",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "념인한와",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  },
+  {
+    "main_wordtype": "nng",
+    "main_stimuli_type": "target",
+    "main_target": "친들이",
+    "main_coranswer": "z",
+    "main_VA": "LVF_3",
+    "main_POS": "n"
+  }
+];
+
+    var target = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: function(){
+        if (jsPsych.timelineVariable('main_VA')=="RVF_1"){
+            return `<div><p style="font-size: 60px;margin: auto; position: absolute; right:40%; font-family:'Malgun Gothic';">${jsPsych.timelineVariable('main_target')}</p></div>`;
+        }
+        else if (jsPsych.timelineVariable('main_VA')=="RVF_2"){
+            return `<div><p style="font-size: 60px;margin: auto; position: absolute; right:25%; font-family:'Malgun Gothic';">${jsPsych.timelineVariable('main_target')}</p></div>`;
+        }
+        else if (jsPsych.timelineVariable('main_VA')=="RVF_3"){
+            return `<div><p style="font-size: 60px;margin: auto; position: absolute; right:15%; font-family:'Malgun Gothic';">${jsPsych.timelineVariable('main_target')}</p></div>`;
+        }
+        else if (jsPsych.timelineVariable('main_VA')=="LVF_3"){
+            return `<div><p style="font-size: 60px;margin: auto; position: absolute; left:15%; font-family:'Malgun Gothic';">${jsPsych.timelineVariable('main_target')}</p></div>`;
+        }
+        else if (jsPsych.timelineVariable('main_VA')=="LVF_2"){
+            return `<div><p style="font-size: 60px; margin: auto;position: absolute; left:25%; font-family:'Malgun Gothic';">${jsPsych.timelineVariable('main_target')}</p></div>`;
+        }
+        else {
+            return `<div><p style="font-size: 60px;margin: auto; position: absolute; left:40%; font-family:'Malgun Gothic';">${jsPsych.timelineVariable('main_target')}</p></div>`;
+        }
+      },
+      choices: ['/', 'z'],
+      data: {
+        task: 'response',
+        correct_response: jsPsych.timelineVariable('main_coranswer'),
+      },
+      on_finish: function(data){
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+        data.location = jsPsych.timelineVariable('main_VA');
+        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
+        jsPsych.setProgressBar(curr_progress_bar_value + (1/stimulus_cnt));
+      }
+    };
+
+    var test_procedure = {
+      timeline: [fixation, target, blank],
+      timeline_variables: test_stimuli,
+      randomize_order: true,
+      data:{
+        phase:'test'
+      },
+    };
+    timeline.push(test_procedure);
+    jsPsych.run(timeline);
+
+  </script>
+</html>
+
